@@ -5,9 +5,7 @@ on:
   push:
     branches:
       - master
-#  pull_request:
-#   branches:
-#      - main
+      
 # Env variables for the runner
 env:
   OPENSOURCE_TOOL_PATH: /home/users/eda_tools/opensource

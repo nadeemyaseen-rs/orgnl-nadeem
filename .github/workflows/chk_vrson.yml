@@ -4,10 +4,10 @@ name: OpenFPGA RS Verssion Check
 on:
   push:
     branches:
-      - main
-  pull_request:
-   branches:
-      - main
+      - master
+#  pull_request:
+#   branches:
+#      - main
 # Env variables for the runner
 env:
   OPENSOURCE_TOOL_PATH: /home/users/eda_tools/opensource

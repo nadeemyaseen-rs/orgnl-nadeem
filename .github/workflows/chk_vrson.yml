@@ -1,0 +1,38 @@
+name: OpenFPGA RS Verssion Check
+
+# Only run for pull requests as we care contribution to the master
+on:
+  push:
+    branches:
+      - main
+#  pull_request:
+#   branches:
+#      - main
+# Env variables for the runner
+env:
+  OPENSOURCE_TOOL_PATH: /home/users/eda_tools/opensource
+  # get the commit using command git log -1 --pretty=format:"%H"
+  FREEZE_COMMIT: 53b2634ff3f4cdef9bf8b856d757430b4f95c4ef
+
+jobs:
+  Compare_Version:
+#    runs-on: chk_opnfpga_v
+    runs-on: self-hosted
+    steps:
+      - name: Cancel previous
+        uses: styfle/cancel-workflow-action@0.9.1
+        with:
+          access_token: ${{ github.token }}
+  
+      - name: Compare
+        id: comparison
+        run: |
+          b_version=`cd ${OPENSOURCE_TOOL_PATH}/pre_build_openfpga/OpenFPGA_RS && git log -1 --pretty=format:"%H"` 
+          [[ $b_version == ${{ env.FREEZE_COMMIT }} ]] && echo "Both are same" ||  OUTPUT=1
+          echo "::set-output name=OUTPUT::$OUTPUT";
+     
+      - name: Failure Report
+        if: steps.comparison.outputs.OUTPUT == 1
+        run: |
+          echo "Both are not same"
+          exit 1
